@@ -1,0 +1,29 @@
+backend:
+  name: git-gateway
+  branch: main 
+
+media_folder: "images"
+public_folder: "/images"
+
+collections:
+  - name: "pages"
+    label: "Налаштування сторінки"
+    files:
+      - label: "Головна"
+        name: "home"
+        file: "data.json"
+        fields:
+          - {label: "Заголовок сторінки", name: "title", widget: "string", default: "Гірлянда Бахрома вулична 105 LED • 6 метрів"}
+          - {label: "Артикул (SKU)", name: "sku", widget: "string", default: "6МBY"}
+          - {label: "Акційний бейдж", name: "badge", widget: "string", default: "ХІТ СЕЗОНУ • АРТ. 6МBY"}
+          - {label: "Акційна ціна (грн)", name: "promo_price", widget: "number", value_type: "int", default: 363}
+          - {label: "Гуртова ціна від 2 шт (грн)", name: "wholesale_price", widget: "number", value_type: "int", default: 340}
+          - {label: "Стара ціна (грн)", name: "old_price", widget: "number", value_type: "int", default: 669}
+          - {label: "Залишок на складі (шт)", name: "stock", widget: "number", value_type: "int", default: 448}
+          - {label: "Кількість ящиків", name: "boxes_count", widget: "number", value_type: "int", default: 14}
+          - {label: "Місткість ящика", name: "box_capacity", widget: "number", value_type: "int", default: 32}
+          - {label: "Телефон менеджера", name: "phone", widget: "string", default: "+38 (098) 123-45-67"}
+          - {label: "Telegram", name: "telegram", widget: "string", default: "@lumigarland"}
+          - {label: "Telegram Bot Token", name: "tg_bot_token", widget: "string", required: false}
+          - {label: "Telegram Chat ID", name: "tg_chat_id", widget: "string", required: false}
+          - {label: "Опис товару (lead)", name: "lead_text", widget: "text"}

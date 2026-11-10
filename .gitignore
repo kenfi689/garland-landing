@@ -1,0 +1,11 @@
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs & temp
+*.log
+.system_generated/
+
+# Backup folder (files are now in repository root)
+lend-main/
