@@ -8,18 +8,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  <script>
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on("init", user => {
-        if (!user) {
-          window.netlifyIdentity.on("login", () => {
-            document.location.href = "admin/";
-          });
-        }
-      });
-    }
-  </script>
+  
+  
 </head>
 <body>
 
@@ -713,15 +703,7 @@
          document.querySelectorAll('[data-cms="discount_tag"]').forEach(el => el.textContent = `-${discountPct}% ЕКОНОМІЯ`);
          document.querySelectorAll('[data-cms="wholesale_pct"]').forEach(el => el.textContent = `-${wholesalePct}%`);
          
-         if (data.badge) {
-           document.querySelectorAll('[data-cms="badge"]').forEach(el => el.textContent = data.badge);
-         }
-         if (data.title) {
-           document.querySelectorAll('[data-cms="title"]').forEach(el => el.innerHTML = data.title);
-         }
-         if (data.lead_text) {
-           document.querySelectorAll('[data-cms="lead"]').forEach(el => el.innerHTML = data.lead_text);
-         }
+
 
          // Оновлення ліміту полів замовлення
          const qtyInput = document.getElementById('orderQtyInput');
@@ -737,4 +719,4 @@
 </script>
 
 
-<iframe id="netlify-identity-widget" title="Netlify identity widget" style="position: fixed; top: 0; left: 0; border: none; width: 100%; height: 100%; overflow: visible; background: transparent; display: none; z-index: 99; " src="about:blank"></iframe><iframe id="netlify-identity-widget" title="Netlify identity widget" style="position: fixed; top: 0; left: 0; border: none; width: 100%; height: 100%; overflow: visible; background: transparent; display: none; z-index: 99; " src="about:blank"></iframe></body></html>
+</body></html>

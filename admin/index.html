@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Адмін-панель — Редагування сайту</title>
+  <title>Керування сайтом — Адмін-панель</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0b0f19;
-      --card-bg: #141c2e;
-      --card-border: #1f2d48;
-      --input-bg: #0d1424;
-      --input-border: #283959;
+      --bg: #090d16;
+      --card-bg: #131b2e;
+      --card-border: #1e2c47;
+      --input-bg: #0b1120;
+      --input-border: #263859;
       --text: #f1f5f9;
       --text-muted: #94a3b8;
       --accent: #f59e0b;
@@ -22,7 +22,7 @@
       --primary-hover: #2563eb;
       --success: #10b981;
       --danger: #ef4444;
-      --radius: 10px;
+      --radius: 12px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,52 +36,54 @@
       flex-direction: column;
     }
 
-    /* Верхня фіксована панель керування */
-    .top-navbar {
+    /* Навігація вгорі */
+    .top-bar {
       background: #111827;
       border-bottom: 1px solid var(--card-border);
-      padding: 10px 20px;
+      padding: 12px 24px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       gap: 16px;
-      flex-wrap: wrap;
       position: sticky;
       top: 0;
       z-index: 100;
+      flex-wrap: wrap;
     }
 
-    .brand-wrap {
+    .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .brand-icon {
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       background: linear-gradient(135deg, #f59e0b, #d97706);
       border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
-      box-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
+      font-size: 20px;
     }
 
-    .brand-title {
-      font-size: 1.05rem;
+    .brand-text h1 {
+      font-size: 1.1rem;
       font-weight: 700;
       color: #fff;
     }
+    .brand-text p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
 
-    /* Вкладки перемикання режимів */
     .tabs-nav {
       display: flex;
-      background: #0d1424;
-      padding: 4px;
-      border-radius: 8px;
+      background: #090e1a;
       border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 4px;
       gap: 4px;
     }
 
@@ -89,7 +91,7 @@
       background: transparent;
       border: none;
       color: var(--text-muted);
-      padding: 7px 14px;
+      padding: 8px 16px;
       border-radius: 6px;
       font-size: 0.88rem;
       font-weight: 600;
@@ -99,19 +101,13 @@
       gap: 6px;
       transition: all 0.2s;
     }
-
-    .tab-btn:hover {
-      color: #fff;
-    }
-
+    .tab-btn:hover { color: #fff; }
     .tab-btn.active {
       background: var(--primary);
       color: #fff;
-      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.35);
     }
 
-    /* Кнопки дій */
-    .actions-wrap {
+    .top-actions {
       display: flex;
       align-items: center;
       gap: 10px;
@@ -120,23 +116,22 @@
     .btn {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 8px 16px;
-      border-radius: 6px;
+      gap: 8px;
+      padding: 9px 18px;
+      border-radius: 8px;
       font-weight: 600;
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       cursor: pointer;
       border: 1px solid transparent;
-      transition: all 0.2s;
       text-decoration: none;
       color: #fff;
+      transition: all 0.2s;
     }
-
     .btn-accent {
       background: linear-gradient(135deg, #f59e0b, #d97706);
       color: #fff;
       font-weight: 700;
-      box-shadow: 0 2px 12px rgba(245, 158, 11, 0.4);
+      box-shadow: 0 2px 14px rgba(245, 158, 11, 0.4);
     }
     .btn-accent:hover { filter: brightness(1.1); transform: translateY(-1px); }
 
@@ -146,103 +141,127 @@
       color: var(--text);
     }
     .btn-outline:hover { background: var(--card-border); color: #fff; }
+    .btn-sm { padding: 6px 12px; font-size: 0.82rem; }
 
-    .btn-sm { padding: 5px 10px; font-size: 0.8rem; }
-
-    /* Підказка щодо режиму редагування */
-    .editor-infobar {
-      background: rgba(245, 158, 11, 0.12);
-      border-bottom: 1px solid rgba(245, 158, 11, 0.25);
-      padding: 8px 20px;
-      font-size: 0.86rem;
-      color: #fde68a;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .device-switcher {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-    }
-
-    .device-btn {
-      background: rgba(0,0,0,0.3);
-      border: 1px solid rgba(245, 158, 11, 0.3);
-      color: #fde68a;
-      padding: 3px 8px;
-      border-radius: 4px;
-      font-size: 0.8rem;
-      cursor: pointer;
-    }
-    .device-btn.active {
-      background: var(--accent);
-      color: #000;
-      font-weight: 700;
-    }
-
-    /* Головна зона */
-    .main-content {
+    /* Головний контент */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 20px;
+      width: 100%;
       flex: 1;
-      display: flex;
-      flex-direction: column;
-      position: relative;
     }
 
-    .tab-content {
+    .tab-pane {
       display: none;
-      flex: 1;
       width: 100%;
     }
-    .tab-content.active {
+    .tab-pane.active {
+      display: block;
+    }
+
+    /* Секції редактора */
+    .section-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .section-header h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .section-header span {
+      font-size: 1.4rem;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 18px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .form-group {
       display: flex;
       flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
     }
 
-    /* 1. Візуальний редактор (Iframe) */
-    .visual-wrapper {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      background: #070a12;
-      padding: 10px;
-      overflow: hidden;
-      min-height: calc(100vh - 120px);
+    label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
-    #visualFrame {
-      width: 100%;
-      height: calc(100vh - 140px);
+    input, textarea, select {
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      outline: none;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    input:focus, textarea:focus { border-color: var(--primary); }
+
+    textarea {
+      min-height: 85px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .helper-text {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* Підблоки в картках (напр. переваги, FAQ) */
+    .sub-card {
+      background: rgba(11, 17, 32, 0.6);
       border: 1px solid var(--card-border);
       border-radius: 8px;
-      background: #0f172a;
-      transition: width 0.3s ease;
+      padding: 16px;
+      margin-bottom: 14px;
     }
 
-    /* 2. Редактор коду */
-    .code-wrapper {
-      padding: 20px;
-      flex: 1;
+    .sub-card-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 10px;
       display: flex;
-      flex-direction: column;
-      gap: 10px;
-      max-width: 1200px;
-      margin: 0 auto;
-      width: 100%;
-    }
-
-    .code-header {
-      display: flex;
-      justify-content: space-between;
       align-items: center;
+      gap: 6px;
     }
 
-    #codeEditor {
-      flex: 1;
-      min-height: 550px;
+    /* Редактор коду */
+    #rawCodeEditor {
+      width: 100%;
+      min-height: 600px;
       background: #070a12;
       border: 1px solid var(--card-border);
       border-radius: 8px;
@@ -251,66 +270,30 @@
       font-family: 'JetBrains Mono', Consolas, monospace;
       font-size: 0.9rem;
       line-height: 1.5;
-      resize: vertical;
       white-space: pre;
-      tab-size: 2;
     }
 
-    /* 3. Швидкі параметри */
-    .settings-wrapper {
-      padding: 24px;
-      max-width: 900px;
-      margin: 0 auto;
+    /* Попередній перегляд (Iframe) */
+    .preview-frame-wrap {
       width: 100%;
-    }
-
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius);
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-
-    .card-title {
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin-bottom: 14px;
-      color: #fff;
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 14px;
-    }
-
-    .form-group {
       display: flex;
-      flex-direction: column;
-      gap: 6px;
+      justify-content: center;
+      background: #070a12;
+      padding: 12px;
+      border-radius: var(--radius);
+      border: 1px solid var(--card-border);
     }
 
-    label {
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
+    #previewFrame {
+      width: 100%;
+      height: 750px;
+      border: none;
+      border-radius: 8px;
+      background: #fff;
     }
 
-    input, select, textarea {
-      background: var(--input-bg);
-      border: 1px solid var(--input-border);
-      color: var(--text);
-      padding: 9px 12px;
-      border-radius: 6px;
-      font-size: 0.95rem;
-      outline: none;
-    }
-    input:focus, textarea:focus { border-color: var(--primary); }
-
-    /* Alert сповіщення */
-    .toast-msg {
+    /* Toast */
+    .toast {
       position: fixed;
       bottom: 24px;
       right: 24px;
@@ -323,14 +306,12 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
       z-index: 1000;
       display: none;
-      animation: slideIn 0.3s ease;
     }
-    @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     .toast-success { border-color: var(--success); background: #064e3b; }
     .toast-error { border-color: var(--danger); background: #7f1d1d; }
     .toast-info { border-color: var(--primary); background: #1e3a8a; }
 
-    /* Модальні вікна */
+    /* Modal */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -346,7 +327,7 @@
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: var(--radius);
-      max-width: 550px;
+      max-width: 500px;
       width: 100%;
       padding: 24px;
     }
@@ -354,168 +335,319 @@
 </head>
 <body>
 
-  <!-- Верхній навбар -->
-  <header class="top-navbar">
-    <div class="brand-wrap">
+  <!-- Верхня панель -->
+  <header class="top-bar">
+    <div class="brand">
       <div class="brand-icon">✦</div>
-      <div>
-        <div class="brand-title">LumiGarland — Адмінка</div>
-        <div style="font-size:0.75rem; color:var(--text-muted);" id="ghRepoStatus">Підключення: kenfi689/garland-landing</div>
+      <div class="brand-text">
+        <h1>LumiGarland — Керування сайтом</h1>
+        <p id="repoLabel">Репозиторій: kenfi689/garland-landing</p>
       </div>
     </div>
 
     <!-- Вкладки режимів -->
     <nav class="tabs-nav">
-      <button type="button" class="tab-btn active" data-tab="visual">
-        <span>🎨 Візуальний редактор сайту</span>
+      <button type="button" class="tab-btn active" data-tab="blocks">
+        <span>📝 Тексти та блоки сайту</span>
+      </button>
+      <button type="button" class="tab-btn" data-tab="prices">
+        <span>💰 Ціни та склад</span>
+      </button>
+      <button type="button" class="tab-btn" data-tab="preview">
+        <span>👁️ Попередній перегляд</span>
       </button>
       <button type="button" class="tab-btn" data-tab="code">
-        <span>💻 Редактор HTML-коду (index.html)</span>
-      </button>
-      <button type="button" class="tab-btn" data-tab="settings">
-        <span>⚙️ Швидкі ціни (data.json)</span>
+        <span>💻 HTML-код (index.html)</span>
       </button>
     </nav>
 
     <!-- Кнопки дій -->
-    <div class="actions-wrap">
-      <button type="button" class="btn btn-outline btn-sm" id="openSettingsModalBtn">🔑 GitHub Токен</button>
-      <a href="../" target="_blank" class="btn btn-outline btn-sm">👁️ Відкрити сайт</a>
-      <button type="button" class="btn btn-accent" id="mainPublishBtn">
+    <div class="top-actions">
+      <button type="button" class="btn btn-outline btn-sm" id="tokenBtn">🔑 GitHub Токен</button>
+      <a href="../" target="_blank" class="btn btn-outline btn-sm">🌐 Відкрити сайт</a>
+      <button type="button" class="btn btn-accent" id="saveAllBtn">
         <span>🚀 Опублікувати зміни на сайт</span>
       </button>
     </div>
   </header>
 
-  <!-- Підказка для візуального редактора -->
-  <div class="editor-infobar" id="visualInfobar">
-    <div>
-      💡 <strong>Як редагувати:</strong> Клікніть мишкою по <u>будь-якому слову, заголовку, кнопці чи тексту</u> на макеті сайту нижче і друкуйте новий текст, або клікніть на фото щоб змінити його. Після завершення натисніть вгорі <strong>«Опублікувати зміни на сайт»</strong>!
-    </div>
-    <div class="device-switcher">
-      <button type="button" class="device-btn active" data-width="100%">💻 Десктоп</button>
-      <button type="button" class="device-btn" data-width="768px">📱 Планшет</button>
-      <button type="button" class="device-btn" data-width="420px">📱 Смартфон</button>
-    </div>
-  </div>
+  <!-- Головна робоча зона -->
+  <main class="container">
 
-  <!-- Головна частина -->
-  <main class="main-content">
-
-    <!-- 1. ВІЗУАЛЬНИЙ РЕДАКТОР -->
-    <section class="tab-content active" id="tab-visual">
-      <div class="visual-wrapper">
-        <iframe id="visualFrame" title="Visual Website Editor"></iframe>
-      </div>
-    </section>
-
-    <!-- 2. РЕДАКТОР HTML КОДУ -->
-    <section class="tab-content" id="tab-code">
-      <div class="code-wrapper">
-        <div class="code-header">
-          <div>
-            <h3 style="font-size:1.05rem; font-weight:700;">Прямий редактор файлу index.html</h3>
-            <p style="font-size:0.8rem; color:var(--text-muted);">Тут ви можете змінити або додати будь-який HTML-код, нові секції, блоки або стилі</p>
-          </div>
-          <button type="button" class="btn btn-outline btn-sm" id="reloadCodeBtn">🔄 Перезавантажити з GitHub</button>
+    <!-- 1. РЕДАКТОР БЛОКІВ САЙТУ (ОСНОВНИЙ) -->
+    <div class="tab-pane active" id="pane-blocks">
+      
+      <!-- Блок 1: Головний екран (Hero) -->
+      <section class="section-card">
+        <div class="section-header">
+          <span>🌟</span>
+          <h2>Головний екран (Hero-блок)</h2>
         </div>
-        <textarea id="codeEditor" spellcheck="false" placeholder="Завантаження HTML-коду сторінки..."></textarea>
-      </div>
-    </section>
 
-    <!-- 3. ШВИДКІ ЦІНИ ТА СКЛАД (data.json) -->
-    <section class="tab-content" id="tab-settings">
-      <div class="settings-wrapper">
-        <div class="card">
-          <h3 class="card-title">💰 Швидкі налаштування цін та залишків (data.json)</h3>
-          <div class="grid-2">
-            <div class="form-group">
-              <label for="f_promo_price">Акційна ціна за 1 шт (грн)</label>
-              <input type="number" id="f_promo_price" />
-            </div>
-            <div class="form-group">
-              <label for="f_wholesale_price">Гуртова ціна від 2 шт (грн)</label>
-              <input type="number" id="f_wholesale_price" />
-            </div>
-            <div class="form-group">
-              <label for="f_old_price">Стара ціна (грн)</label>
-              <input type="number" id="f_old_price" />
-            </div>
-            <div class="form-group">
-              <label for="f_stock">Залишок на складі (шт)</label>
-              <input type="number" id="f_stock" />
-            </div>
-            <div class="form-group">
-              <label for="f_phone">Телефон магазину</label>
-              <input type="text" id="f_phone" />
-            </div>
-            <div class="form-group">
-              <label for="f_telegram">Telegram контакт</label>
-              <input type="text" id="f_telegram" />
-            </div>
+        <div class="form-group">
+          <label for="f_hero_badge">Верхній промо-бейдж</label>
+          <input type="text" id="f_hero_badge" placeholder="ХІТ СЕЗОНУ • АРТ. 6МBY" />
+        </div>
+
+        <div class="form-group">
+          <label for="f_hero_title">Головний заголовок товару</label>
+          <input type="text" id="f_hero_title" placeholder="Гірлянда Бахрома вулична 105 LED • 6 метрів..." />
+          <span class="helper-text">Цей заголовок покупець бачить найпершим на сайті</span>
+        </div>
+
+        <div class="form-group">
+          <label for="f_hero_lead">Опис товару (Lead-текст під заголовком)</label>
+          <textarea id="f_hero_lead" rows="3" placeholder="Професійна вулична світлодіодна бахрома..."></textarea>
+        </div>
+
+        <div class="grid-3">
+          <div class="form-group">
+            <label for="f_spec1_val">Цифра 1</label>
+            <input type="text" id="f_spec1_val" value="6 метрів" />
+            <input type="text" id="f_spec1_lbl" value="Загальна довжина + 96 см шнур" style="margin-top:4px;" />
           </div>
-          <div style="margin-top:16px;">
-            <button type="button" class="btn btn-primary btn-sm" id="saveDataJsonBtn">💾 Зберегти лише ціни (data.json)</button>
+          <div class="form-group">
+            <label for="f_spec2_val">Цифра 2</label>
+            <input type="text" id="f_spec2_val" value="105 LED" />
+            <input type="text" id="f_spec2_lbl" value="Крок 8 см • Жовтий + Флеш" style="margin-top:4px;" />
+          </div>
+          <div class="form-group">
+            <label for="f_spec3_val">Цифра 3</label>
+            <input type="text" id="f_spec3_val" value="21 лінія" />
+            <input type="text" id="f_spec3_lbl" value="Каскад 65 / 50 / 30 см (крок 29 см)" style="margin-top:4px;" />
           </div>
         </div>
+      </section>
+
+      <!-- Блок 2: Зображення товару -->
+      <section class="section-card">
+        <div class="section-header">
+          <span>🖼️</span>
+          <h2>Зображення товару та фасадів</h2>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="f_img_lifestyle">Фото на фасаді будинку (lifestyle)</label>
+            <input type="text" id="f_img_lifestyle" value="images/lifestyle-facade.jpg" />
+            <span class="helper-text">Шлях до файлу (images/lifestyle-facade.jpg) або повний URL у інтернеті (https://...)</span>
+          </div>
+          <div class="form-group">
+            <label for="f_img_product">Оригінальне фото товару (product)</label>
+            <input type="text" id="f_img_product" value="images/product.png" />
+            <span class="helper-text">Шлях до файлу (images/product.png) або повний URL у інтернеті (https://...)</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Блок 3: Переваги товару -->
+      <section class="section-card">
+        <div class="section-header">
+          <span>💎</span>
+          <h2>Переваги товару (4 картки)</h2>
+        </div>
+        
+        <div class="grid-2">
+          <div class="sub-card">
+            <div class="sub-card-title">✨ Перевага 1</div>
+            <div class="form-group">
+              <label for="f_feat1_title">Заголовок</label>
+              <input type="text" id="f_feat1_title" />
+            </div>
+            <div class="form-group">
+              <label for="f_feat1_text">Текст</label>
+              <textarea id="f_feat1_text"></textarea>
+            </div>
+          </div>
+
+          <div class="sub-card">
+            <div class="sub-card-title">🖤 Перевага 2</div>
+            <div class="form-group">
+              <label for="f_feat2_title">Заголовок</label>
+              <input type="text" id="f_feat2_title" />
+            </div>
+            <div class="form-group">
+              <label for="f_feat2_text">Текст</label>
+              <textarea id="f_feat2_text"></textarea>
+            </div>
+          </div>
+
+          <div class="sub-card">
+            <div class="sub-card-title">📐 Перевага 3</div>
+            <div class="form-group">
+              <label for="f_feat3_title">Заголовок</label>
+              <input type="text" id="f_feat3_title" />
+            </div>
+            <div class="form-group">
+              <label for="f_feat3_text">Текст</label>
+              <textarea id="f_feat3_text"></textarea>
+            </div>
+          </div>
+
+          <div class="sub-card">
+            <div class="sub-card-title">🔌 Перевага 4</div>
+            <div class="form-group">
+              <label for="f_feat4_title">Заголовок</label>
+              <input type="text" id="f_feat4_title" />
+            </div>
+            <div class="form-group">
+              <label for="f_feat4_text">Текст</label>
+              <textarea id="f_feat4_text"></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Блок 4: Питання та відповіді (FAQ) -->
+      <section class="section-card">
+        <div class="section-header">
+          <span>❓</span>
+          <h2>Часті питання та відповіді (FAQ)</h2>
+        </div>
+
+        <div class="sub-card">
+          <div class="sub-card-title">Питання 1</div>
+          <div class="form-group">
+            <input type="text" id="f_faq1_q" placeholder="Питання" />
+          </div>
+          <div class="form-group">
+            <textarea id="f_faq1_a" placeholder="Відповідь"></textarea>
+          </div>
+        </div>
+
+        <div class="sub-card">
+          <div class="sub-card-title">Питання 2</div>
+          <div class="form-group">
+            <input type="text" id="f_faq2_q" placeholder="Питання" />
+          </div>
+          <div class="form-group">
+            <textarea id="f_faq2_a" placeholder="Відповідь"></textarea>
+          </div>
+        </div>
+
+        <div class="sub-card">
+          <div class="sub-card-title">Питання 3</div>
+          <div class="form-group">
+            <input type="text" id="f_faq3_q" placeholder="Питання" />
+          </div>
+          <div class="form-group">
+            <textarea id="f_faq3_a" placeholder="Відповідь"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- Блок 5: Контакти -->
+      <section class="section-card">
+        <div class="section-header">
+          <span>📞</span>
+          <h2>Контакти магазину</h2>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="f_phone">Телефон для зв'язку</label>
+            <input type="text" id="f_phone" placeholder="+38 (098) 123-45-67" />
+          </div>
+          <div class="form-group">
+            <label for="f_telegram">Telegram (нік або посилання)</label>
+            <input type="text" id="f_telegram" placeholder="@lumigarland" />
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- 2. ЦІНИ ТА СКЛАД -->
+    <div class="tab-pane" id="pane-prices">
+      <section class="section-card">
+        <div class="section-header">
+          <span>💰</span>
+          <h2>Ціни, знижки та складські залишки</h2>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="f_promo_price">Акційна ціна за 1 шт (грн)</label>
+            <input type="number" id="f_promo_price" value="363" />
+          </div>
+          <div class="form-group">
+            <label for="f_wholesale_price">Гуртова ціна від 2 шт (грн)</label>
+            <input type="number" id="f_wholesale_price" value="340" />
+          </div>
+          <div class="form-group">
+            <label for="f_old_price">Стара ціна (грн)</label>
+            <input type="number" id="f_old_price" value="669" />
+          </div>
+          <div class="form-group">
+            <label for="f_stock">Залишок на складі (шт)</label>
+            <input type="number" id="f_stock" value="448" />
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- 3. ПОПЕРЕДНІЙ ПЕРЕГЛЯД -->
+    <div class="tab-pane" id="pane-preview">
+      <div style="margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:0.9rem; color:var(--text-muted);">Попередній перегляд сайту перед публікацією:</span>
+        <button type="button" class="btn btn-outline btn-sm" id="refreshPreviewBtn">🔄 Оновити попередній перегляд</button>
       </div>
-    </section>
+      <div class="preview-frame-wrap">
+        <iframe id="previewFrame" title="Site Preview"></iframe>
+      </div>
+    </div>
+
+    <!-- 4. РЕДАКТОР HTML-КОДУ -->
+    <div class="tab-pane" id="pane-code">
+      <section class="section-card">
+        <div class="section-header">
+          <span>💻</span>
+          <h2>Редактор повного вихідного коду (index.html)</h2>
+        </div>
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px;">
+          Тут можна вручну змінити будь-який HTML-код, класи, додати лічильники Google Analytics / Meta Pixel або створити нові блоки.
+        </p>
+        <textarea id="rawCodeEditor" spellcheck="false"></textarea>
+      </section>
+    </div>
 
   </main>
 
-  <!-- Спливаюче сповіщення Toast -->
-  <div class="toast-msg" id="toastMsg"></div>
+  <!-- Спливаюче сповіщення -->
+  <div class="toast" id="toast"></div>
 
-  <!-- Модальне вікно зміни зображення -->
-  <div class="modal-overlay" id="imageModal">
+  <!-- Модальне вікно токена -->
+  <div class="modal-overlay" id="tokenModal">
     <div class="modal-card">
-      <h3 style="margin-bottom:12px; font-size:1.1rem;">Зміна зображення</h3>
-      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:14px;">Введіть посилання на нове зображення (URL в інтернеті або шлях у проекті, наприклад <code>images/product.png</code>):</p>
-      <input type="text" id="newImageSrc" style="width:100%; margin-bottom:16px;" placeholder="https://... або images/..." />
-      <div style="display:flex; justify-content:flex-end; gap:10px;">
-        <button type="button" class="btn btn-outline btn-sm" id="cancelImageModalBtn">Скасувати</button>
-        <button type="button" class="btn btn-primary btn-sm" id="confirmImageModalBtn">Застосувати</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Модальне вікно налаштування GitHub -->
-  <div class="modal-overlay" id="settingsModal">
-    <div class="modal-card">
-      <h3 style="margin-bottom:14px; font-size:1.15rem;">⚙️ Налаштування доступу до GitHub</h3>
+      <h3 style="margin-bottom:12px; font-size:1.15rem;">🔑 Підключення до GitHub</h3>
       
-      <div class="form-group" style="margin-bottom:12px;">
+      <div class="form-group">
         <label>Власник GitHub (Username)</label>
         <input type="text" id="cfgOwner" value="kenfi689" />
       </div>
 
-      <div class="form-group" style="margin-bottom:12px;">
-        <label>Назва репозиторію</label>
+      <div class="form-group">
+        <label>Репозиторій</label>
         <input type="text" id="cfgRepo" value="garland-landing" />
       </div>
 
-      <div class="form-group" style="margin-bottom:12px;">
+      <div class="form-group">
         <label>Гілка</label>
         <input type="text" id="cfgBranch" value="main" />
       </div>
 
       <div class="form-group" style="margin-bottom:16px;">
-        <label>Personal Access Token (з галочкою 'repo')</label>
+        <label>Personal Access Token</label>
         <input type="password" id="cfgToken" placeholder="ghp_xxxxxxxxxxxx" />
-        <small style="color:var(--text-muted); font-size:0.75rem; margin-top:4px;">
-          Токен можна згенерувати на <a href="https://github.com/settings/tokens/new" target="_blank" style="color:var(--primary);">github.com/settings/tokens/new</a>
-        </small>
       </div>
 
       <div style="display:flex; justify-content:flex-end; gap:10px;">
-        <button type="button" class="btn btn-outline btn-sm" id="closeSettingsModalBtn">Закрити</button>
-        <button type="button" class="btn btn-primary btn-sm" id="saveSettingsBtn">Зберегти</button>
+        <button type="button" class="btn btn-outline btn-sm" id="closeTokenModalBtn">Закрити</button>
+        <button type="button" class="btn btn-accent btn-sm" id="saveTokenBtn">Зберегти</button>
       </div>
     </div>
   </div>
 
   <script>
-    // Конфігурація GitHub
+    // GitHub конфігурація
     let ghConfig = {
       owner: localStorage.getItem('gh_owner') || 'kenfi689',
       repo: localStorage.getItem('gh_repo') || 'garland-landing',
@@ -523,65 +655,38 @@
       token: localStorage.getItem('gh_token') || ''
     };
 
-    let activeTab = 'visual';
-    let currentHtmlContent = '';
+    let fullHtml = '';
     let htmlFileSha = null;
     let dataFileSha = null;
-    let selectedImageElement = null;
 
-    // Toast сповіщення
+    // Спливаючі сповіщення
     function showToast(text, type = 'info', duration = 5000) {
-      const toast = document.getElementById('toastMsg');
+      const toast = document.getElementById('toast');
       toast.textContent = text;
-      toast.className = `toast-msg toast-${type}`;
+      toast.className = `toast toast-${type}`;
       toast.style.display = 'block';
       setTimeout(() => { toast.style.display = 'none'; }, duration);
-    }
-
-    // Оновлення статусу
-    function updateRepoStatusUI() {
-      document.getElementById('ghRepoStatus').textContent = `Підключення: ${ghConfig.owner}/${ghConfig.repo} (${ghConfig.branch})`;
-      document.getElementById('cfgOwner').value = ghConfig.owner;
-      document.getElementById('cfgRepo').value = ghConfig.repo;
-      document.getElementById('cfgBranch').value = ghConfig.branch;
-      document.getElementById('cfgToken').value = ghConfig.token;
     }
 
     // Перемикання вкладок
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        const tab = btn.dataset.tab;
-        activeTab = tab;
+        const target = btn.dataset.tab;
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === target));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === `pane-${target}`));
 
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.id === `tab-${tab}`));
-
-        document.getElementById('visualInfobar').style.display = (tab === 'visual') ? 'flex' : 'none';
-
-        // Синхронізація контенту між візуальним редактором та кодом
-        if (tab === 'code') {
-          syncVisualToCode();
-        } else if (tab === 'visual') {
-          syncCodeToVisual();
+        if (target === 'code') {
+          syncBlocksToCode();
+        } else if (target === 'preview') {
+          syncBlocksToPreview();
         }
       });
     });
 
-    // Перемикання розміру девайсів для візуального редактора
-    document.querySelectorAll('.device-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.device-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById('visualFrame').style.width = btn.dataset.width;
-      });
-    });
-
-    // Завантаження index.html (спочатку локально або з GitHub)
-    async function loadHtmlContent() {
-      showToast('⏳ Завантажуємо вміст сторінки...', 'info', 2000);
+    // Завантаження коду index.html
+    async function loadSiteData() {
+      showToast('⏳ Завантажуємо поточний сайт...', 'info', 2000);
       try {
-        let htmlText = '';
-        // Спробуємо отримати з GitHub API якщо є токен або публічно
         const url = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/index.html?ref=${ghConfig.branch}&_=${Date.now()}`;
         const headers = { 'Accept': 'application/vnd.github.v3+json' };
         if (ghConfig.token) headers['Authorization'] = `token ${ghConfig.token}`;
@@ -590,254 +695,305 @@
         if (res.ok) {
           const json = await res.json();
           htmlFileSha = json.sha;
-          htmlText = decodeURIComponent(escape(atob(json.content.replace(/\s/g, ''))));
+          fullHtml = decodeURIComponent(escape(atob(json.content.replace(/\s/g, ''))));
         } else {
-          // Якщо GitHub не відповів, завантажимо локальний ../index.html
-          const localRes = await fetch('../index.html?v=' + Date.now());
-          htmlText = await localRes.text();
+          // fallback локально
+          const local = await fetch('../index.html?v=' + Date.now());
+          fullHtml = await local.text();
         }
 
-        currentHtmlContent = htmlText;
-        document.getElementById('codeEditor').value = htmlText;
-        initVisualFrame(htmlText);
+        document.getElementById('rawCodeEditor').value = fullHtml;
+        parseHtmlIntoBlocks(fullHtml);
+        syncBlocksToPreview();
       } catch (err) {
         console.error(err);
-        showToast('Помилка завантаження index.html', 'error');
+        showToast('Помилка завантаження сайту з GitHub', 'error');
       }
-    }
 
-    // Ініціалізація візуального фрейму з можливістю редагувати будь-який текст
-    function initVisualFrame(html) {
-      const frame = document.getElementById('visualFrame');
-      const blob = new Blob([html], { type: 'text/html' });
-      frame.src = URL.createObjectURL(blob);
-
-      frame.onload = () => {
-        try {
-          const doc = frame.contentDocument || frame.contentWindow.document;
-
-          // Робимо всі текстові елементи редагованими
-          doc.designMode = 'on';
-
-          // Додаємо красиві стилі підсвітки елементів при наведенні
-          const style = doc.createElement('style');
-          style.id = 'admin-injected-style';
-          style.textContent = `
-            [contenteditable="true"]:hover, *:hover {
-              outline: 2px dashed rgba(245, 158, 11, 0.45) !important;
-              cursor: text !important;
-            }
-            [contenteditable="true"]:focus, *:focus {
-              outline: 2px solid #f59e0b !important;
-              background: rgba(245, 158, 11, 0.1) !important;
-            }
-            img {
-              cursor: pointer !important;
-            }
-            img:hover {
-              outline: 3px solid #3b82f6 !important;
-            }
-          `;
-          doc.head.appendChild(style);
-
-          // Обробка кліку по зображеннях для заміни
-          doc.querySelectorAll('img').forEach(img => {
-            img.addEventListener('click', (e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              selectedImageElement = img;
-              document.getElementById('newImageSrc').value = img.getAttribute('src') || '';
-              document.getElementById('imageModal').style.display = 'flex';
-            });
-          });
-
-          // Зупиняємо перехід за посиланнями у режимі редагування
-          doc.querySelectorAll('a').forEach(a => {
-            a.addEventListener('click', (e) => {
-              if (doc.designMode === 'on') {
-                e.preventDefault();
-              }
-            });
-          });
-
-        } catch (e) {
-          console.log('Cross-origin frame note:', e);
-        }
-      };
-    }
-
-    // Синхронізація з візуального фрейму в текстовий редактор
-    function syncVisualToCode() {
-      const frame = document.getElementById('visualFrame');
+      // Також завантажимо data.json для цін
       try {
-        const doc = frame.contentDocument || frame.contentWindow.document;
-        // Видаляємо інжектовані стилі адмінки перед збереженням
-        const injected = doc.getElementById('admin-injected-style');
-        if (injected) injected.remove();
-
-        const cleanHtml = '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
-        currentHtmlContent = cleanHtml;
-        document.getElementById('codeEditor').value = cleanHtml;
-
-        // Повертаємо інжектований стиль назад для подальшого редагування
-        if (injected) doc.head.appendChild(injected);
+        const dataUrl = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/data.json?ref=${ghConfig.branch}&_=${Date.now()}`;
+        const dRes = await fetch(dataUrl, { headers: { 'Accept': 'application/vnd.github.v3+json' } });
+        if (dRes.ok) {
+          const dJson = await dRes.json();
+          dataFileSha = dJson.sha;
+          const parsed = JSON.parse(decodeURIComponent(escape(atob(dJson.content.replace(/\s/g, '')))));
+          if (parsed.promo_price) document.getElementById('f_promo_price').value = parsed.promo_price;
+          if (parsed.wholesale_price) document.getElementById('f_wholesale_price').value = parsed.wholesale_price;
+          if (parsed.old_price) document.getElementById('f_old_price').value = parsed.old_price;
+          if (parsed.stock) document.getElementById('f_stock').value = parsed.stock;
+          if (parsed.phone) document.getElementById('f_phone').value = parsed.phone;
+          if (parsed.telegram) document.getElementById('f_telegram').value = parsed.telegram;
+        }
       } catch (e) {
-        console.error(e);
+        console.log('data.json load note:', e);
       }
     }
 
-    // Синхронізація з коду у візуальний фрейм
-    function syncCodeToVisual() {
-      const code = document.getElementById('codeEditor').value;
-      currentHtmlContent = code;
-      initVisualFrame(code);
+    // Розбір HTML у поля блоків
+    function parseHtmlIntoBlocks(htmlString) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlString, 'text/html');
+
+      // Hero
+      const titleEl = doc.querySelector('.hero-title');
+      if (titleEl) document.getElementById('f_hero_title').value = titleEl.innerHTML.trim();
+
+      const leadEl = doc.querySelector('.hero-lead');
+      if (leadEl) document.getElementById('f_hero_lead').value = leadEl.innerHTML.trim();
+
+      const badgeEl = doc.querySelector('.promo-badge');
+      if (badgeEl) document.getElementById('f_hero_badge').value = badgeEl.innerText.trim();
+
+      // Quick specs
+      const specCards = doc.querySelectorAll('.quick-spec-card');
+      if (specCards[0]) {
+        document.getElementById('f_spec1_val').value = specCards[0].querySelector('.quick-spec-val')?.innerText.trim() || '';
+        document.getElementById('f_spec1_lbl').value = specCards[0].querySelector('.quick-spec-lbl')?.innerText.trim() || '';
+      }
+      if (specCards[1]) {
+        document.getElementById('f_spec2_val').value = specCards[1].querySelector('.quick-spec-val')?.innerText.trim() || '';
+        document.getElementById('f_spec2_lbl').value = specCards[1].querySelector('.quick-spec-lbl')?.innerText.trim() || '';
+      }
+      if (specCards[2]) {
+        document.getElementById('f_spec3_val').value = specCards[2].querySelector('.quick-spec-val')?.innerText.trim() || '';
+        document.getElementById('f_spec3_lbl').value = specCards[2].querySelector('.quick-spec-lbl')?.innerText.trim() || '';
+      }
+
+      // Зображення
+      const imgLifestyle = doc.querySelector('img[src*="lifestyle"]');
+      if (imgLifestyle) document.getElementById('f_img_lifestyle').value = imgLifestyle.getAttribute('src');
+
+      const imgProduct = doc.querySelector('img[src*="product"]');
+      if (imgProduct) document.getElementById('f_img_product').value = imgProduct.getAttribute('src');
+
+      // Переваги
+      const featCards = doc.querySelectorAll('#features .feature-card');
+      for (let i = 0; i < 4; i++) {
+        if (featCards[i]) {
+          const h3 = featCards[i].querySelector('h3');
+          const p = featCards[i].querySelector('p');
+          const tInput = document.getElementById(`f_feat${i+1}_title`);
+          const pInput = document.getElementById(`f_feat${i+1}_text`);
+          if (tInput && h3) tInput.value = h3.innerText.trim();
+          if (pInput && p) pInput.value = p.innerText.trim();
+        }
+      }
+
+      // FAQ
+      const faqItems = doc.querySelectorAll('#faq .faq-item');
+      for (let i = 0; i < 3; i++) {
+        if (faqItems[i]) {
+          const qSpan = faqItems[i].querySelector('.faq-question span:first-child');
+          const aP = faqItems[i].querySelector('.faq-answer p');
+          const qInput = document.getElementById(`f_faq${i+1}_q`);
+          const aInput = document.getElementById(`f_faq${i+1}_a`);
+          if (qInput && qSpan) qInput.value = qSpan.innerText.trim();
+          if (aInput && aP) aInput.value = aP.innerText.trim();
+        }
+      }
     }
 
-    // Заміна зображення
-    document.getElementById('confirmImageModalBtn').addEventListener('click', () => {
-      const newSrc = document.getElementById('newImageSrc').value.trim();
-      if (selectedImageElement && newSrc) {
-        selectedImageElement.src = newSrc;
-        selectedImageElement.setAttribute('src', newSrc);
-        showToast('Зображення замінено!', 'success');
+    // Застосування значень з полів у HTML
+    function buildUpdatedHtml() {
+      // Якщо користувач правив вкладку raw code, беремо його
+      let baseHtml = fullHtml;
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(baseHtml, 'text/html');
+
+      // Оновлюємо Hero
+      const titleEl = doc.querySelector('.hero-title');
+      if (titleEl) titleEl.innerHTML = document.getElementById('f_hero_title').value;
+
+      const leadEl = doc.querySelector('.hero-lead');
+      if (leadEl) leadEl.innerHTML = document.getElementById('f_hero_lead').value;
+
+      const badgeEl = doc.querySelector('.promo-badge');
+      if (badgeEl) badgeEl.innerText = document.getElementById('f_hero_badge').value;
+
+      // Quick specs
+      const specCards = doc.querySelectorAll('.quick-spec-card');
+      if (specCards[0]) {
+        const v = specCards[0].querySelector('.quick-spec-val');
+        const l = specCards[0].querySelector('.quick-spec-lbl');
+        if (v) v.innerText = document.getElementById('f_spec1_val').value;
+        if (l) l.innerText = document.getElementById('f_spec1_lbl').value;
       }
-      document.getElementById('imageModal').style.display = 'none';
-    });
-    document.getElementById('cancelImageModalBtn').addEventListener('click', () => {
-      document.getElementById('imageModal').style.display = 'none';
-    });
+      if (specCards[1]) {
+        const v = specCards[1].querySelector('.quick-spec-val');
+        const l = specCards[1].querySelector('.quick-spec-lbl');
+        if (v) v.innerText = document.getElementById('f_spec2_val').value;
+        if (l) l.innerText = document.getElementById('f_spec2_lbl').value;
+      }
+      if (specCards[2]) {
+        const v = specCards[2].querySelector('.quick-spec-val');
+        const l = specCards[2].querySelector('.quick-spec-lbl');
+        if (v) v.innerText = document.getElementById('f_spec3_val').value;
+        if (l) l.innerText = document.getElementById('f_spec3_lbl').value;
+      }
+
+      // Зображення
+      const imgLifestyle = doc.querySelector('img[src*="lifestyle"]');
+      if (imgLifestyle) imgLifestyle.setAttribute('src', document.getElementById('f_img_lifestyle').value);
+
+      const imgProduct = doc.querySelector('img[src*="product"]');
+      if (imgProduct) imgProduct.setAttribute('src', document.getElementById('f_img_product').value);
+
+      // Переваги
+      const featCards = doc.querySelectorAll('#features .feature-card');
+      for (let i = 0; i < 4; i++) {
+        if (featCards[i]) {
+          const h3 = featCards[i].querySelector('h3');
+          const p = featCards[i].querySelector('p');
+          const tVal = document.getElementById(`f_feat${i+1}_title`)?.value;
+          const pVal = document.getElementById(`f_feat${i+1}_text`)?.value;
+          if (h3 && tVal !== undefined) h3.innerText = tVal;
+          if (p && pVal !== undefined) p.innerText = pVal;
+        }
+      }
+
+      // FAQ
+      const faqItems = doc.querySelectorAll('#faq .faq-item');
+      for (let i = 0; i < 3; i++) {
+        if (faqItems[i]) {
+          const qSpan = faqItems[i].querySelector('.faq-question span:first-child');
+          const aP = faqItems[i].querySelector('.faq-answer p');
+          const qVal = document.getElementById(`f_faq${i+1}_q`)?.value;
+          const aVal = document.getElementById(`f_faq${i+1}_a`)?.value;
+          if (qSpan && qVal !== undefined) qSpan.innerText = qVal;
+          if (aP && aVal !== undefined) aP.innerText = aVal;
+        }
+      }
+
+      return '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
+    }
+
+    function syncBlocksToCode() {
+      const updated = buildUpdatedHtml();
+      document.getElementById('rawCodeEditor').value = updated;
+    }
+
+    function syncBlocksToPreview() {
+      const updated = buildUpdatedHtml();
+      const frame = document.getElementById('previewFrame');
+      const blob = new Blob([updated], { type: 'text/html' });
+      frame.src = URL.createObjectURL(blob);
+    }
+
+    document.getElementById('refreshPreviewBtn').addEventListener('click', syncBlocksToPreview);
 
     // ЗБЕРЕЖЕННЯ ТА ПУБЛІКАЦІЯ НА GITHUB
-    document.getElementById('mainPublishBtn').addEventListener('click', async () => {
+    document.getElementById('saveAllBtn').addEventListener('click', async () => {
       if (!ghConfig.token) {
-        showToast('⚠️ Введіть ваш GitHub токен (кнопка "GitHub Токен" вгорі)', 'error', 7000);
-        document.getElementById('settingsModal').style.display = 'flex';
+        showToast('⚠️ Вкажіть GitHub токен для збереження змін', 'error', 6000);
+        document.getElementById('tokenModal').style.display = 'flex';
         return;
       }
 
-      // Синхронізуємо актуальний стан сторінки
-      if (activeTab === 'visual') {
-        syncVisualToCode();
-      } else {
-        currentHtmlContent = document.getElementById('codeEditor').value;
-      }
+      const saveBtn = document.getElementById('saveAllBtn');
+      const originalText = saveBtn.innerHTML;
+      saveBtn.innerHTML = '⏳ Публікуємо на сайт...';
+      saveBtn.disabled = true;
 
-      const publishBtn = document.getElementById('mainPublishBtn');
-      const originalText = publishBtn.innerHTML;
-      publishBtn.innerHTML = '⏳ Публікуємо на GitHub...';
-      publishBtn.disabled = true;
-
-      showToast('🚀 Публікуємо зміни сайту на GitHub...', 'info', 0);
+      showToast('🚀 Зберігаємо оновлений сайт у GitHub...', 'info', 0);
 
       try {
-        // Отримуємо актуальний sha для index.html
+        const finalHtml = buildUpdatedHtml();
+        fullHtml = finalHtml;
+        document.getElementById('rawCodeEditor').value = finalHtml;
+
         const headers = {
           'Accept': 'application/vnd.github.v3+json',
           'Authorization': `token ${ghConfig.token}`,
           'Content-Type': 'application/json'
         };
 
+        // 1. Зберігаємо index.html
         const getUrl = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/index.html?ref=${ghConfig.branch}&_=${Date.now()}`;
         const getRes = await fetch(getUrl, { headers });
         let sha = htmlFileSha;
         if (getRes.ok) {
-          const fileData = await getRes.json();
-          sha = fileData.sha;
+          const fInfo = await getRes.json();
+          sha = fInfo.sha;
         }
 
-        const encodedContent = btoa(unescape(encodeURIComponent(currentHtmlContent)));
-
+        const encodedHtml = btoa(unescape(encodeURIComponent(finalHtml)));
         const putUrl = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/index.html`;
+
         const putRes = await fetch(putUrl, {
           method: 'PUT',
           headers,
           body: JSON.stringify({
-            message: 'Оновлення вмісту сайту (Візуальний редактор адмінки)',
-            content: encodedContent,
+            message: 'Редагування вмісту сайту через адмінку',
+            content: encodedHtml,
             sha: sha,
             branch: ghConfig.branch
           })
         });
 
         if (!putRes.ok) {
-          const errJson = await putRes.json();
-          throw new Error(errJson.message || `HTTP ${putRes.status}`);
+          const err = await putRes.json();
+          throw new Error(err.message || 'Помилка збереження index.html');
         }
 
         const putData = await putRes.json();
         htmlFileSha = putData.content ? putData.content.sha : null;
 
-        showToast('🎉 САЙТ ОНОВЛЕНО! Зміни успішно збережено на GitHub. Через 30–60 секунд вони зʼявляться на живому сайті.', 'success', 10000);
-      } catch (err) {
-        showToast(`❌ Помилка: ${err.message}. Перевірте токен.`, 'error', 8000);
-      } finally {
-        publishBtn.innerHTML = originalText;
-        publishBtn.disabled = false;
-      }
-    });
+        // 2. Також зберігаємо актуальний data.json для цін
+        try {
+          const updatedData = {
+            promo_price: Number(document.getElementById('f_promo_price').value) || 363,
+            wholesale_price: Number(document.getElementById('f_wholesale_price').value) || 340,
+            old_price: Number(document.getElementById('f_old_price').value) || 669,
+            stock: Number(document.getElementById('f_stock').value) || 448,
+            phone: document.getElementById('f_phone').value.trim(),
+            telegram: document.getElementById('f_telegram').value.trim()
+          };
 
-    // Збереження лише data.json
-    document.getElementById('saveDataJsonBtn').addEventListener('click', async () => {
-      if (!ghConfig.token) {
-        showToast('Введіть GitHub токен у налаштуваннях', 'error');
-        document.getElementById('settingsModal').style.display = 'flex';
-        return;
-      }
+          const dGet = await fetch(`https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/data.json?ref=${ghConfig.branch}&_=${Date.now()}`, { headers });
+          let dSha = dataFileSha;
+          if (dGet.ok) {
+            const dj = await dGet.json();
+            dSha = dj.sha;
+          }
 
-      const updatedData = {
-        promo_price: Number(document.getElementById('f_promo_price').value) || 363,
-        wholesale_price: Number(document.getElementById('f_wholesale_price').value) || 340,
-        old_price: Number(document.getElementById('f_old_price').value) || 669,
-        stock: Number(document.getElementById('f_stock').value) || 448,
-        phone: document.getElementById('f_phone').value.trim(),
-        telegram: document.getElementById('f_telegram').value.trim()
-      };
-
-      try {
-        const headers = {
-          'Accept': 'application/vnd.github.v3+json',
-          'Authorization': `token ${ghConfig.token}`,
-          'Content-Type': 'application/json'
-        };
-
-        const getUrl = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/data.json?ref=${ghConfig.branch}&_=${Date.now()}`;
-        const getRes = await fetch(getUrl, { headers });
-        let sha = dataFileSha;
-        if (getRes.ok) {
-          const fileData = await getRes.json();
-          sha = fileData.sha;
+          const encodedData = btoa(unescape(encodeURIComponent(JSON.stringify(updatedData, null, 2))));
+          await fetch(`https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/data.json`, {
+            method: 'PUT',
+            headers,
+            body: JSON.stringify({
+              message: 'Оновлення цін через адмінку',
+              content: encodedData,
+              sha: dSha,
+              branch: ghConfig.branch
+            })
+          });
+        } catch (e) {
+          console.log('data.json sync note:', e);
         }
 
-        const jsonStr = JSON.stringify(updatedData, null, 2);
-        const encoded = btoa(unescape(encodeURIComponent(jsonStr)));
-
-        const putUrl = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/data.json`;
-        const putRes = await fetch(putUrl, {
-          method: 'PUT',
-          headers,
-          body: JSON.stringify({
-            message: 'Оновлення data.json через адмінку',
-            content: encoded,
-            sha: sha,
-            branch: ghConfig.branch
-          })
-        });
-
-        if (!putRes.ok) throw new Error('Помилка збереження data.json');
-        showToast('Ціни в data.json оновлено!', 'success');
-      } catch (e) {
-        showToast(e.message, 'error');
+        showToast('🎉 УСПІХ! Всі зміни на сайті збережено в GitHub! Через 30–60 секунд оновлений сайт буде доступний усім відвідувачам.', 'success', 10000);
+        syncBlocksToPreview();
+      } catch (err) {
+        showToast(`❌ Помилка: ${err.message}`, 'error', 8000);
+      } finally {
+        saveBtn.innerHTML = originalText;
+        saveBtn.disabled = false;
       }
     });
 
-    // Налаштування GitHub
-    document.getElementById('openSettingsModalBtn').addEventListener('click', () => {
-      document.getElementById('settingsModal').style.display = 'flex';
+    // Налаштування токена
+    document.getElementById('tokenBtn').addEventListener('click', () => {
+      document.getElementById('cfgOwner').value = ghConfig.owner;
+      document.getElementById('cfgRepo').value = ghConfig.repo;
+      document.getElementById('cfgBranch').value = ghConfig.branch;
+      document.getElementById('cfgToken').value = ghConfig.token;
+      document.getElementById('tokenModal').style.display = 'flex';
     });
-    document.getElementById('closeSettingsModalBtn').addEventListener('click', () => {
-      document.getElementById('settingsModal').style.display = 'none';
+    document.getElementById('closeTokenModalBtn').addEventListener('click', () => {
+      document.getElementById('tokenModal').style.display = 'none';
     });
-    document.getElementById('saveSettingsBtn').addEventListener('click', () => {
+    document.getElementById('saveTokenBtn').addEventListener('click', () => {
       ghConfig.owner = document.getElementById('cfgOwner').value.trim();
       ghConfig.repo = document.getElementById('cfgRepo').value.trim();
       ghConfig.branch = document.getElementById('cfgBranch').value.trim() || 'main';
@@ -848,18 +1004,15 @@
       localStorage.setItem('gh_branch', ghConfig.branch);
       localStorage.setItem('gh_token', ghConfig.token);
 
-      updateRepoStatusUI();
-      document.getElementById('settingsModal').style.display = 'none';
-      showToast('Налаштування GitHub збережені!', 'success');
-      loadHtmlContent();
+      document.getElementById('tokenModal').style.display = 'none';
+      document.getElementById('repoLabel').textContent = `Репозиторій: ${ghConfig.owner}/${ghConfig.repo}`;
+      showToast('Налаштування збережено!', 'success');
+      loadSiteData();
     });
 
-    // Перезавантаження коду
-    document.getElementById('reloadCodeBtn').addEventListener('click', loadHtmlContent);
-
     // Ініціалізація
-    updateRepoStatusUI();
-    loadHtmlContent();
+    document.getElementById('repoLabel').textContent = `Репозиторій: ${ghConfig.owner}/${ghConfig.repo}`;
+    loadSiteData();
   </script>
 </body>
 </html>
